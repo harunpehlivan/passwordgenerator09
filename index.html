@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Password Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel="stylesheet" href="./style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
+<div id="app">
+  
+  <div class="button-row">
+    <button @click="create" class="big">Add another +</button>
+    <button v-if="passwords.length" @click="regenerateAll" class="big info">Regenerate all</button>
+  </div>
+  
+  <hr />
+  
+  <div class="length-row">
+    <div>
+      <label for="passwordLength">Length: </label><input v-model="passwordLength" min="1" max="50" id="passwordLength" type="range" />
+    </div>
+    <div>
+      <input v-model="passwordLength" type="number" />
+    </div>
+  </div>
+  <hr />
+  <div class="button-row">
+    <button v-bind:class="activeIf('complex')" @click="setChars('complex')">Complex</button>
+    <button v-bind:class="activeIf('alphanumeric')" @click="setChars('alphanumeric')">Alphanumeric</button>
+    <button v-bind:class="activeIf('letters')" @click="setChars('letters')">Letters</button>
+    <button v-bind:class="activeIf('numbers')" @click="setChars('numbers')">Numbers</button>
+    <button v-bind:class="activeIf('custom')" @click="setChars('custom')">Custom</button>
+    <button v-bind:class="{ 'active' : showcase }" @click="toggleCase">Case...</button>
+  </div>
+  
+  <div v-if="showcase" class="option">
+    Case:
+    <label for="radio-UPPER">
+      <input type="radio" v-model="textcase" id="radio-UPPER" value="UPPER"/> 
+      Uppercase
+    </label>
+    <label for="radio-LOWER">
+      <input type="radio" v-model="textcase" id="radio-LOWER" value="LOWER"/> 
+      Lowercase
+    </label>
+    <label for="radio-NONE">
+      <input type="radio" v-model="textcase" id="radio-NONE" value="NONE"/>
+      Both
+    </label>
+  </div>
+  
+  <div v-if="key == 'custom'" class="option">
+    <textarea rows="2" type="text" v-model="custom"></textarea>
+  </div>
+  
+  <hr />
+  
+  <ol v-if="passwords.length">
+    <li v-for="(password, index) in passwords">
+      <div>
+        <input type="text" :value="password"
+          :ref="'input'+index"
+          @focus="$event.target.select()"
+          @click="$event.target.select()">
+        <button @click="remake(index)">Regenerate</button>
+        <button @click="remove(index)" class="bad">Remove</button>
+        <button @click="copy(index, $event)" class="info">Copy</button>
+      </div>
+    </li>
+  </ol>
+  <div v-else>
+    <p>Please generate a password by clicking above!</p>
+  </div>
+  
+</div>
+<!-- partial -->
+  <script src='https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js'></script><script  src="./script.js"></script>
+
+</body>
+</html>
